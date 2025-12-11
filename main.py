@@ -1,14 +1,26 @@
+import base64
+import os
+import json
+import time
+from openai import OpenAI
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import JSONResponse, FileResponse
 import uvicorn
-import base64
-import os
-import time
-from openai import OpenAI
-import json
+
+app = FastAPI()
 
 os.makedirs("uploads", exist_ok=True)
 os.makedirs("logs", exist_ok=True)
+
+# Load the OpenAI API key from environment variables
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+
+if not OPENAI_API_KEY:
+    raise RuntimeError("OPENAI_API_KEY environment variable is not set")
+
+# Create the client ONCE (global)
+client = OpenAI(api_key=OPENAI_API_KEY)
+
 
 
 app = FastAPI()
